@@ -7,3 +7,4 @@ langchain-google-genai
 pymupdf
 python-dotenv
 requests==2.32.4
+streamlit

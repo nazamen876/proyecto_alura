@@ -71,6 +71,13 @@ prompt_rag = ChatPromptTemplate(
 
 document_chain = create_stuff_documents_chain(llm, prompt=prompt_rag)
 
+def formatear_contexto(documentos) -> str:
+  """Junta el contenido de los documentos recuperados en un solo texto,
+  para poder pasárselo como contexto a cualquier modelo (LangChain o
+  google-generativeai directo)."""
+  return "\n\n".join(doc.page_content for doc in documentos)
+
+
 def busqueda_de_preguntas_RAG(pregunta) -> Dict:
   documentosRelacionados = retriever.invoke(pregunta)
 
@@ -99,21 +106,21 @@ def busqueda_de_preguntas_RAG(pregunta) -> Dict:
         "documentos_encontrados" : True
     }
 
-mensajes_de_prueba = [
-    "Puedo obtener un reembolso por el internet de mi home office?",
-    "Quiero una excepción para teletrabajar durante 5 días",
-    "Como funciona la política de comidas para viajes?",
-    "Existe una política para anticipos de vacaciones?",
-    "Quien es Napoleón Bonaparte"
-]
+#mensajes_de_prueba = [
+#    "Puedo obtener un reembolso por el internet de mi home office?",
+#    "Quiero una excepción para teletrabajar durante 5 días",
+#    "Como funciona la política de comidas para viajes?",
+#    "Existe una política para anticipos de vacaciones?",
+#    "Quien es Napoleón Bonaparte"
+#]
 
-for pregunta in mensajes_de_prueba:
-  respuesta_RAG = busqueda_de_preguntas_RAG(pregunta)
-  print(f"PREGUNTA: {pregunta}")
-  print(f"RESPUESTA: {respuesta_RAG['respuesta']}")
-  if respuesta_RAG["documentos_encontrados"]:
-    for i, citacion in enumerate(respuesta_RAG['citaciones']):
-      print(f"CITACION {i+1}: ")
-      print(f"Camino del documento: {citacion.metadata['file_path']}")
-      print(f"Contenido: {citacion.page_content}")
-      print("------------------------------------------------------------")
+#for pregunta in mensajes_de_prueba:
+#  respuesta_RAG = busqueda_de_preguntas_RAG(pregunta)
+#  print(f"PREGUNTA: {pregunta}")
+#  print(f"RESPUESTA: {respuesta_RAG['respuesta']}")
+#  if respuesta_RAG["documentos_encontrados"]:
+#    for i, citacion in enumerate(respuesta_RAG['citaciones']):
+#      print(f"CITACION {i+1}: ")
+#      print(f"Camino del documento: {citacion.metadata['file_path']}")
+#      print(f"Contenido: {citacion.page_content}")
+#      print("------------------------------------------------------------")
